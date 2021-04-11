@@ -15,8 +15,8 @@
 const variableArray = process.argv;
 // We will store each piece of information in a dedicated variable for later use.
 let amount = parseInt(variableArray[2]);
-let initialCurrency = variableArray[3].toUpperCase();
-let targetCurrency = variableArray[4].toUpperCase();
+let initialCurrency = variableArray[3];
+let targetCurrency = variableArray[4];
 
 
 // --------------------------------------------------
@@ -27,20 +27,26 @@ let targetCurrency = variableArray[4].toUpperCase();
 // If any of the required information is missing, display a meaningful message
 // and exit the program.
 if (amount == undefined){
-    if (Number.isNaN(amount)){
-        console.log('Kindly provide an integer value for amount');
-        process.exit();
-    }
     console.log('Amount not entered');
     process.exit()
+}
+if (Number.isNaN(amount)){
+    console.log('Kindly provide an integer value for amount');
+    process.exit();
 }
 if (initialCurrency == undefined){
     console.log('Initial currency not provided');
     process.exit()
 }
+else{
+    initialCurrency = initialCurrency.toUpperCase();
+}
 if (targetCurrency == undefined){
     console.log('Target currency not provided');
     process.exit()
+}
+else{
+    targetCurrency = targetCurrency.toUpperCase();
 }
 
 
@@ -55,10 +61,17 @@ if (targetCurrency == undefined){
 
 // The conversion rates do not have to be accurate, athough this resource contains
 // up-to-date rate information: https://www.xe.com/
-const currencyRates = {
-    USD: {CAD: 2},
-    CAD: {USD: 0.5}
+// const currencyRates = {
+//     USD: {CAD: 2},
+//     CAD: {USD: 0.5}
+// }
+
+const dynamicRatesWRTOneUSD = {
+    CAD: 2,
+    INR: 70,
 }
+
+supportedRates = ['USD', 'INR', 'CAD'];
 
 
 // --------------------------------------------------
@@ -69,20 +82,53 @@ const currencyRates = {
 
 // If the user supplies an invalid initial or target currency, display a meaningful
 // warning message and exit the program.
+
+// if(currencyRates[initialCurrency] == undefined){
+//     console.log('Unsupported initial currency entered')
+//     console.log('Supported currencies: USD CAD')
+//     console.log(`Received: ${initialCurrency}`)
+//     process.exit()
+// }
+// if(currencyRates[initialCurrency][targetCurrency] == undefined){
+//     if (initialCurrency == targetCurrency){
+//         result = amount
+//     }
+//     else{
+//         console.log('Unsupported target currency entered')
+//         console.log('Supported currencies: USD CAD')
+//         console.log(`Received: ${targetCurrency}`)
+//         process.exit()
+//     }
+// }
 let result;
-if(currencyRates[initialCurrency] == undefined){
-    console.log('Unsupported initial currency entered')
-    console.log('Supported currencies: USD CAD')
-    console.log(`Received: ${initialCurrency}`)
-    process.exit()
-}
-if(currencyRates[initialCurrency][targetCurrency] == undefined){
+const initialCurrencyIncluded = supportedRates.includes(initialCurrency);
+const targetCurrencyIncluded = supportedRates.includes(targetCurrency);
+if (supportedRates.includes(initialCurrency) && supportedRates.includes(targetCurrency)){
     if (initialCurrency == targetCurrency){
         result = amount
     }
-    else{
+    else {
+        if(initialCurrency == 'USD'){
+            result = amount * dynamicRates[targetCurrency];
+        }
+        else if(targetCurrency == 'USD'){
+            result = amount / dynamicRates[initialCurrency];
+        }
+        else {
+            result = (amount / dynamicRates[initialCurrency]) * dynamicRates[targetCurrency];
+        }
+    }
+}
+else {
+    if (!initialCurrencyIncluded){
+        console.log('Unsupported initial currency entered')
+        console.log('Supported currencies: USD CAD INR')
+        console.log(`Received: ${initialCurrency}`)
+        process.exit()
+    }
+    else if(!targetCurrencyIncluded){
         console.log('Unsupported target currency entered')
-        console.log('Supported currencies: USD CAD')
+        console.log('Supported currencies: USD CAD INR')
         console.log(`Received: ${targetCurrency}`)
         process.exit()
     }
@@ -96,9 +142,9 @@ if(currencyRates[initialCurrency][targetCurrency] == undefined){
 // information, and that a rate exists for each of the currencies.
 
 // Now we will compute the rate, apply it to the amount, and capture the result.
-else{
- result = amount * currencyRates[initialCurrency][targetCurrency]
-}
+// else{
+//  result = amount * currencyRates[initialCurrency][targetCurrency];
+// }
 
 // --------------------------------------------------
 // Step 6: Display results
@@ -107,4 +153,4 @@ else{
 
 // This message should also include the original amount and currency information
 // supplied by the user.
-console.log(`${amount} ${initialCurrency} is equal to ${result} ${targetCurrency}`)
+console.log(`${amount} ${initialCurrency} is equal to ${result.toFixed(3)} ${targetCurrency}`)
