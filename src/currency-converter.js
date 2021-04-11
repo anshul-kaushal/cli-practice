@@ -15,8 +15,8 @@
 const variableArray = process.argv;
 // We will store each piece of information in a dedicated variable for later use.
 let amount = parseInt(variableArray[2]);
-let initialCurrency = variableArray[3];
-let targetCurrency = variableArray[4];
+let initialCurrency = variableArray[3].toUpperCase();
+let targetCurrency = variableArray[4].toUpperCase();
 
 
 // --------------------------------------------------
@@ -26,7 +26,6 @@ let targetCurrency = variableArray[4];
 
 // If any of the required information is missing, display a meaningful message
 // and exit the program.
-console.log(amount);
 if (amount == undefined){
     if (Number.isNaN(amount)){
         console.log('Kindly provide an integer value for amount');
@@ -70,7 +69,18 @@ const currencyRates = {
 
 // If the user supplies an invalid initial or target currency, display a meaningful
 // warning message and exit the program.
-
+if(currencyRates[initialCurrency] == undefined){
+    console.log('Unsupported initial currency entered')
+    console.log('Supported currencies: USD CAD')
+    console.log(`Received: ${initialCurrency}`)
+    process.exit()
+}
+if(currencyRates[targetCurrency] == undefined){
+    console.log('Unsupported target currency entered')
+    console.log('Supported currencies: USD CAD')
+    console.log(`Received: ${targetCurrency}`)
+    process.exit()
+}
 
 
 // --------------------------------------------------
@@ -80,8 +90,7 @@ const currencyRates = {
 // information, and that a rate exists for each of the currencies.
 
 // Now we will compute the rate, apply it to the amount, and capture the result.
-
-
+let result = amount * currencyRates[initialCurrency][targetCurrency]
 
 // --------------------------------------------------
 // Step 6: Display results
