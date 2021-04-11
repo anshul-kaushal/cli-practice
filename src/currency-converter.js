@@ -26,7 +26,23 @@ let targetCurrency = variableArray[4];
 
 // If any of the required information is missing, display a meaningful message
 // and exit the program.
-
+console.log(amount);
+if (amount == undefined){
+    if (Number.isNaN(amount)){
+        console.log('Kindly provide an integer value for amount');
+        process.exit();
+    }
+    console.log('Amount not entered');
+    process.exit()
+}
+if (initialCurrency == undefined){
+    console.log('Initial currency not provided');
+    process.exit()
+}
+if (targetCurrency == undefined){
+    console.log('Target currency not provided');
+    process.exit()
+}
 
 
 // --------------------------------------------------
