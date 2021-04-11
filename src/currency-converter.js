@@ -69,17 +69,23 @@ const currencyRates = {
 
 // If the user supplies an invalid initial or target currency, display a meaningful
 // warning message and exit the program.
+let result;
 if(currencyRates[initialCurrency] == undefined){
     console.log('Unsupported initial currency entered')
     console.log('Supported currencies: USD CAD')
     console.log(`Received: ${initialCurrency}`)
     process.exit()
 }
-if(currencyRates[targetCurrency] == undefined){
-    console.log('Unsupported target currency entered')
-    console.log('Supported currencies: USD CAD')
-    console.log(`Received: ${targetCurrency}`)
-    process.exit()
+if(currencyRates[initialCurrency][targetCurrency] == undefined){
+    if (initialCurrency == targetCurrency){
+        result = amount
+    }
+    else{
+        console.log('Unsupported target currency entered')
+        console.log('Supported currencies: USD CAD')
+        console.log(`Received: ${targetCurrency}`)
+        process.exit()
+    }
 }
 
 
@@ -90,7 +96,9 @@ if(currencyRates[targetCurrency] == undefined){
 // information, and that a rate exists for each of the currencies.
 
 // Now we will compute the rate, apply it to the amount, and capture the result.
-let result = amount * currencyRates[initialCurrency][targetCurrency]
+else{
+ result = amount * currencyRates[initialCurrency][targetCurrency]
+}
 
 // --------------------------------------------------
 // Step 6: Display results
@@ -99,3 +107,4 @@ let result = amount * currencyRates[initialCurrency][targetCurrency]
 
 // This message should also include the original amount and currency information
 // supplied by the user.
+console.log(`${amount} ${initialCurrency} is equal to ${result} ${targetCurrency}`)
