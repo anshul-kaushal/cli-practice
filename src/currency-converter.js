@@ -12,9 +12,11 @@
 // Step 1: Capture user input
 // --------------------------------------------------
 // In this step we will capture the command line  information supplied by the user.
-
+const variableArray = process.argv;
 // We will store each piece of information in a dedicated variable for later use.
-
+let amount = parseInt(variableArray[2]);
+let initialCurrency = variableArray[3];
+let targetCurrency = variableArray[4];
 
 
 // --------------------------------------------------
