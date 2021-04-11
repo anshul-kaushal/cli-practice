@@ -56,7 +56,10 @@ if (targetCurrency == undefined){
 
 // The conversion rates do not have to be accurate, athough this resource contains
 // up-to-date rate information: https://www.xe.com/
-
+const currencyRates = {
+    USD: {CAD: 2},
+    CAD: {USD: 0.5}
+}
 
 
 // --------------------------------------------------
